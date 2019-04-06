@@ -2,10 +2,11 @@
  * AlbumArtTool by dragonman225
  * v0.1.0: Mar.21, 2019: Initial version.
  * v0.1.1: Mar.23, 2019: Add kkbox support. Refactor code.
+ * v0.1.2: Apr.06, 2019: Improve doc.
  */
 
 var toolConfig = {
-  htmlIdPrefix: "album-art-tool-",
+  injectElemIdPrefix: "album-art-tool-",
   updateThrottleTime: 300
 }
 
@@ -20,14 +21,14 @@ var toolConfig = {
 /**
  * Create a DOM object of an empty link component.
  * @param {string} text - Text to be shown in the link component.
- * @return {Object} The DOM object.
+ * @returns {Object} The DOM object.
  */
 function createLink(text) {
   var newDiv = document.createElement("div");
   var newLink = document.createElement("a");
   var newText = document.createTextNode("Full-res AlbumArt (." + text + ")");
   newLink.setAttribute("href", "");
-  newLink.setAttribute("id", toolConfig.htmlIdPrefix + text);
+  newLink.setAttribute("id", toolConfig.injectElemIdPrefix + text);
   newLink.appendChild(newText);
   newDiv.appendChild(newLink);
   return newDiv;
@@ -35,7 +36,7 @@ function createLink(text) {
 
 /**
  * Get domain from HTML <meta> tag with attribute "property" being "og:url".
- * @return {string} The domain name if exists, otherwise an empty string.
+ * @returns {string} The domain name if exists, otherwise an empty string.
  */
 function getDomain() {
   var metaNodes = document.getElementsByTagName("meta");
@@ -52,7 +53,7 @@ function getDomain() {
 
 /**
  * Get URLs of full-res JPG, PNG, BMP album art in iTunes.
- * @return {urlList} URLs of JPG, PNG, BMP album art.
+ * @returns {urlList} URLs of JPG, PNG, BMP album art.
  */
 function getArtUrlItunes() {
   var artSourceNode = document.getElementsByClassName("we-artwork__source")[0];
@@ -69,7 +70,7 @@ function getArtUrlItunes() {
 
 /**
  * Get URLs of full-res JPG, PNG, BMP album art in kkbox.
- * @return {urlList} URLs of JPG, PNG, BMP album art.
+ * @returns {urlList} URLs of JPG, PNG, BMP album art.
  */
 function getArtUrlKkbox() {
   var metaArea = document.getElementsByClassName("four-more-meta")[0];
@@ -90,9 +91,9 @@ function getArtUrlKkbox() {
  * @param {urlList} urls - An object containing JPG, PNG, BMP album art URLs.
  */
 function updateAlbumArtUrl(urls) {
-  var jpgLinkNode = document.getElementById(toolConfig.htmlIdPrefix + "jpg");
-  var pngLinkNode = document.getElementById(toolConfig.htmlIdPrefix + "png");
-  var bmpLinkNode = document.getElementById(toolConfig.htmlIdPrefix + "bmp");
+  var jpgLinkNode = document.getElementById(toolConfig.injectElemIdPrefix + "jpg");
+  var pngLinkNode = document.getElementById(toolConfig.injectElemIdPrefix + "png");
+  var bmpLinkNode = document.getElementById(toolConfig.injectElemIdPrefix + "bmp");
   jpgLinkNode.setAttribute("href", urls.jpg);
   pngLinkNode.setAttribute("href", urls.png);
   bmpLinkNode.setAttribute("href", urls.bmp);
