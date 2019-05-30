@@ -134,7 +134,7 @@ $(document).ready(function () {
   console.log("AlbumArtTool is running on " + domain);
 
   /* Execute domain-specific functions */
-  if (domain === "itunes.apple.com") {
+  if (domain === "music.apple.com") {
     initItunes();
     updateAlbumArtUrl(getArtUrlItunes());
   } else if (domain === "www.kkbox.com") {

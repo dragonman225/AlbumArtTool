@@ -5,7 +5,7 @@
     "manifest_version":2,
     "content_scripts": [
         {
-            "matches": ["https://itunes.apple.com/*", "https://www.kkbox.com/*"],
+            "matches": ["https://music.apple.com/*", "https://www.kkbox.com/*"],
             "js": ["src/jquery.js","src/extension.js"]
         }
     ]
