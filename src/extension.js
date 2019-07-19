@@ -103,7 +103,7 @@ function getArtUrlKkbox() {
 
 function getFolderNameKkbox() {
   let album = $('.four-more-meta > h1').text()
-  let artist = $('.creator-nick > a').text().trim()
+  let artist = $('.creator-nick > a').text().trim().replace(' ','')
   let date = $('time').text().substring(0, 4)
   let folderName = `[Album]-${artist}-${album}(${date})`
   return folderName
