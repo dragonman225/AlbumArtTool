@@ -3,6 +3,7 @@
  * v0.1.0: Mar.21, 2019: Initial version.
  * v0.1.1: Mar.23, 2019: Add kkbox support. Refactor code.
  * v0.1.2: Apr.06, 2019: Improve doc.
+ * v0.1.3: Jul.20, 2019: Add folder name generation to kkbox.
  */
 
 var toolConfig = {
@@ -31,6 +32,20 @@ function createLink(text) {
   newLink.setAttribute("id", toolConfig.injectElemIdPrefix + text);
   newLink.appendChild(newText);
   newDiv.appendChild(newLink);
+  return newDiv;
+}
+
+/**
+ * Create a DOM object of an empty div component.
+ * @param {string} name - ID without inject-prefix of the element.
+ * @returns {Object} The DOM object.
+ */
+function createDiv(name) {
+  var newDiv = document.createElement("input");
+  newDiv.setAttribute("id", toolConfig.injectElemIdPrefix + name);
+  newDiv.setAttribute("value", "Loading folder name...")
+  newDiv.setAttribute("readonly", true)
+  newDiv.setAttribute("style", "width: 100%;")
   return newDiv;
 }
 
@@ -86,6 +101,14 @@ function getArtUrlKkbox() {
   }
 }
 
+function getFolderNameKkbox() {
+  let album = $('.four-more-meta > h1').text()
+  let artist = $('.creator-nick > a').text().trim()
+  let date = $('time').text().substring(0, 4)
+  let folderName = `[Album]-${artist}-${album}(${date})`
+  return folderName
+}
+
 /**
  * Update URLs of links.
  * @param {urlList} urls - An object containing JPG, PNG, BMP album art URLs.
@@ -97,6 +120,15 @@ function updateAlbumArtUrl(urls) {
   jpgLinkNode.setAttribute("href", urls.jpg);
   pngLinkNode.setAttribute("href", urls.png);
   bmpLinkNode.setAttribute("href", urls.bmp);
+}
+
+function updateFolderName(str) {
+  let folderNameNode = document.getElementById(toolConfig.injectElemIdPrefix + "folder");
+  folderNameNode.setAttribute("value", str)
+  folderNameNode.setAttribute("onClick", `
+  this.select();
+  document.execCommand('copy')`
+  )
 }
 
 /**
@@ -116,14 +148,17 @@ function initItunes() {
  * Init clickable links for kkbox
  */
 function initKkbox() {
+  let container = document.getElementsByClassName("container")[0];
   var metaArea = document.getElementsByClassName("four-more-meta")[0];
   var albumTitle = metaArea.getElementsByTagName("h1")[0];
   var linkJPG = createLink("jpg");
   var linkPNG = createLink("png");
   var linkBMP = createLink("bmp");
+  let folderName = createDiv("folder");
   metaArea.insertBefore(linkJPG, albumTitle);
   metaArea.insertBefore(linkPNG, albumTitle);
   metaArea.insertBefore(linkBMP, albumTitle);
+  container.insertBefore(folderName, container.children[1]);
 }
 
 /* Run on document ready */
@@ -140,6 +175,7 @@ $(document).ready(function () {
   } else if (domain === "www.kkbox.com") {
     initKkbox();
     updateAlbumArtUrl(getArtUrlKkbox());
+    updateFolderName(getFolderNameKkbox());
   }
 
   var lastUpdate = Date.now();
@@ -155,6 +191,7 @@ $(document).ready(function () {
         updateAlbumArtUrl(getArtUrlItunes());
       } else if (domain === "www.kkbox.com") {
         updateAlbumArtUrl(getArtUrlKkbox());
+        updateFolderName(getFolderNameKkbox());
       }
       lastUpdate = Date.now();
       console.log("AlbumArtTool detected DOM changes, URLs were updated.");
