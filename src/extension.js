@@ -4,6 +4,7 @@
  * v0.1.1: Mar.23, 2019: Add kkbox support. Refactor code.
  * v0.1.2: Apr.06, 2019: Improve doc.
  * v0.1.3: Jul.20, 2019: Add folder name generation to kkbox.
+ * v0.1.4: Jul.27, 2019: Get original image on kkbox.
  */
 
 var toolConfig = {
@@ -73,7 +74,7 @@ function getDomain() {
 function getArtUrlItunes() {
   var artSourceNode = document.getElementsByClassName("we-artwork__source")[0];
   var artUrl = artSourceNode.getAttribute("srcset").split(",").pop().split(" ")[0];
-  var artUrlMaxResJPG = artUrl.replace(/939x0w/, "99999x0wbb-100");
+  var artUrlMaxResJPG = artUrl.replace(/939x0w/, "99999x0w");
   var artUrlMaxResPNG = artUrlMaxResJPG.replace(/x0w.jpg/, "x0w.png");
   var artUrlMaxResBMP = artUrlMaxResJPG.replace(/x0w.jpg/, "x0w.bmp");
   return {
@@ -91,7 +92,7 @@ function getArtUrlKkbox() {
   var metaArea = document.getElementsByClassName("four-more-meta")[0];
   var artSourceNode = metaArea.getElementsByTagName("img")[0];
   var artUrl = artSourceNode.getAttribute("src");
-  var artUrlMaxResJPG = artUrl.replace(/fit/500x500/, "original");
+  var artUrlMaxResJPG = artUrl.replace(/fit\/500x500/, "original");
   var artUrlMaxResPNG = artUrlMaxResJPG.replace(/.jpg/, ".png");
   var artUrlMaxResBMP = artUrlMaxResJPG.replace(/.jpg/, ".bmp");
   return {
